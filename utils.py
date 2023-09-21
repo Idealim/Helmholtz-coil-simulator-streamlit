@@ -35,7 +35,7 @@ def plot_st(predicted_values, actual_values, step, best_params=None):
     ax.plot(x, actual_values, label='target_value', marker='', color='black')
     
     if best_params is not None:
-        ax.set_title(f'{best_params}', fontsize=16, fontweight='bold')
+        ax.set_title(f'{best_params}', fontsize=12, fontweight='bold')
     else:
         ax.set_title(f'Predicted_value vs Target_value', fontsize=16, fontweight='bold')
     ax.set_xlabel('x [cm]')
