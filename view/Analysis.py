@@ -4,9 +4,14 @@ from utils import plot_st
 import re
 import pandas as pd
 import numpy as np
+import io
+from data import measurement_datas
+
 
 def Analysis_page():
+
     col1, col2= st.columns(2, gap='large')
+
     with col1:
         if st.session_state.best_params is not None:   
             st.markdown("##### 첫번째 코일의 반지름(r1)")
@@ -75,7 +80,7 @@ def Analysis_page():
             )
             
             st.markdown("##### 목표 직선 시각화")
-            plot_on = st.toggle('목표 직선 시각화')
+            plot_on = st.toggle('목표 직선 시각화', value=True)
             if plot_on:
                 target_value1 = st.number_input(
                     "첫 번째 코일의 목표 H값 입니다. 단위:[Oe]",
@@ -97,54 +102,70 @@ def Analysis_page():
                 results, target_values = helmholtz_coil(r1, r2, d, mf, nf, ms, ns, R, step, target_value1=0., target_value2=0.)
             st.markdown("###### 시각화")
             fig = st.pyplot(plot_st(results, target_values, step=step, title="Model vs Target Line"))
-            st.markdown("###### 모델 예측값")
-            st.write(results)
+            # st.markdown("###### 모델 예측값")
+            # st.write(results)
 
     with col2:
         st.markdown("#### 실험값 입력")
         st.markdown("##### x 좌표 측정 시작값 입력")
-        x_start = st.number_input("x 좌표 시작값, 단위: [cm]", value=0.3, min_value = 0.)
+        x_start = st.number_input("x 좌표 시작값, 단위: [cm]", value=0.7, min_value = 0.)
         st.markdown("##### x 좌표 측정 종료값 입력")
         x_end = st.number_input("x 좌표 종료값, 단위: [cm]", value=4.7, min_value = 0.)
         st.markdown("##### x 좌표 간격 입력")
         x_step = st.number_input("x 좌표 간격, 단위: [cm]", value=0.5, min_value = 0.)
+
+
+        x_coordinates = np.array([x_start + i * x_step for i in range(int((x_end - x_start) / x_step) + 1)])
+        st.write(f"x 좌표: {x_coordinates}")
+
         st.markdown("##### H 측정값 입력")
 
+        is_user_input = st.checkbox("실험값 직접 입력하기")
 
-        # 사용자로부터 숫자 입력 받기
-        user_input = st.text_input("H 측정값을 입력하세요 (쉼표 혹은 띄어쓰기로 구분):", placeholder="ex. 1, 2, 3 or 1 2 3")
+        if is_user_input:
+            # 사용자로부터 숫자 입력 받기
+            user_input = st.text_input("H 측정값을 입력하세요 (쉼표 혹은 띄어쓰기로 구분):", placeholder="ex. 1, 2, 3 or 1 2 3")
 
-        # 입력 값이 비어 있는지 확분
-        if user_input:
-            x_coordinates = np.array([x_start + i * x_step for i in range(int((x_end - x_start) / x_step) + 1)])
-            measurement_results = []
-            for num_str in re.split(r'[, ]+', user_input):
-                try:
-                    num = float(num_str)
-                    measurement_results.append(num)
-                except ValueError:
-                    st.error("숫자로 변환할 수 없습니다. , 또는 띄어쓰기로 데이터값을 구분해주세요.") 
-
-            if len(x_coordinates) != len(measurement_results):
-                st.error("x 좌표값 개수와 입력된 실험값 개수가 다릅니다.")
-                st.write(f"x 좌표 개수 : {len(x_coordinates)}, y좌표 개수 : {len(measurement_results)}")
-            else: 
-                st.markdown("##### 입력된 실험값")
+            if user_input:
+                measurement_results = []
+                for num_str in re.split(r'[, ]+', user_input):
+                    try:
+                        num = float(num_str)
+                        measurement_results.append(num)
+                    except ValueError:
+                        st.error("숫자로 변환할 수 없습니다. , 또는 띄어쓰기로 데이터값을 구분해주세요.") 
                 measurement_results = np.array(measurement_results)
+        else: 
+            measurement = st.selectbox('실험 case 를 선택해주세요.',
+                                    ('208/22 try1','208/27 try1','208/27 try2','208/27 mean','208/32 try1','208/32 try2','208/32 mean','218/27 try1','218/27 try2','218/27 mean','198/27 try1','198/27 try2','198/27 mean')
+                                    )
+            measurement_results = measurement_datas[measurement]
+            st.write(f"측정값: {measurement_results}")
 
-                st.write(x_coordinates)
-                st.write(measurement_results)
-
-                slope, intercept = get_line_with_lsm(x_coordinates, measurement_results)
-                line_values = np.array(slope*x_coordinates + intercept)
-                st.write(f"최소 자승법으로 구한 직선 방정식: y = {slope:.2f}x + {intercept:.2f}")
-
-                mse = calculate_mse(line_values, measurement_results)
-                st.write(f"mse: {mse}")
-
-                st.pyplot(plot_st(measurement_results, line_values, x=x_coordinates, title="Measurement Data vs Approximate Line"))
+        if len(x_coordinates) != len(measurement_results):
+            st.error("x 좌표값 개수와 입력된 실험값 개수가 다릅니다.")
+            st.write(f"x 좌표 개수 : {len(x_coordinates)}, y좌표 개수 : {len(measurement_results)}")
+        else: 
+            st.markdown("##### 최소자승법(LMS)으로 직선 구하기")
 
 
+            slope, intercept = get_line_with_lsm(x_coordinates, measurement_results)
+            line_values = np.array(slope*x_coordinates + intercept)
+            st.write(f"최소 자승법으로 구한 직선 방정식: y = {slope:.2f}x + {intercept:.2f}")
+
+            mse = calculate_mse(line_values, measurement_results)
+            # st.write(f"mse: {mse}")
+            fig = plot_st(measurement_results, line_values,
+                x=x_coordinates, title=f"Measurement Data[{measurement}] vs Approximate Line",
+                description=f"mse: {mse:.4f}\n Approximate Line: y = {slope:.2f}x + {intercept:.2f}\n ") 
+            
+            st.pyplot(fig)
+
+            buffer = io.BytesIO()
+            fig.savefig(buffer, format="png", bbox_inches="tight")
+            buffer.seek(0)
+
+            st.download_button(label='Download Graph', data=buffer, file_name=f'{measurement}.png',mime='image/png')
 
 
 
