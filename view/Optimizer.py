@@ -62,7 +62,7 @@ def Optimizer_page():
 
         mf_fixed = st.checkbox("mf 고정값")
         if mf_fixed:
-            mf_value = st.number_input("mf의 고정값을 입력해주세요.", value=5, min_value=1)
+            mf_value = st.number_input("mf의 고정값을 입력해주세요.", value=5, min_value=0)
         else:
             mf = st.slider(
                 "mf의 범위입니다.",
@@ -76,7 +76,7 @@ def Optimizer_page():
         
         nf_fixed = st.checkbox("nf 고정값")
         if nf_fixed:
-            nf_value = st.number_input("nf의 고정값을 입력해주세요.", value=5, min_value=1)
+            nf_value = st.number_input("nf의 고정값을 입력해주세요.", value=5, min_value=0)
         else:
             nf = st.slider(
                 "nf의 범위입니다.",
@@ -89,7 +89,7 @@ def Optimizer_page():
         st.markdown("##### 두번째 코일의 x축 방향으로 감은 횟수(ms)")
         ms_fixed = st.checkbox("ms 고정값")
         if ms_fixed:
-            ms_value = st.number_input("ms의 고정값을 입력해주세요.", value=5, min_value=1)
+            ms_value = st.number_input("ms의 고정값을 입력해주세요.", value=5, min_value=0)
         else:
             ms = st.slider(
                 "ms의 범위입니다.",
@@ -102,7 +102,7 @@ def Optimizer_page():
         st.markdown("##### 두번째 코일의 y축 방향으로 감은 횟수(ns)")
         ns_fixed = st.checkbox("ns 고정값")
         if ns_fixed:
-            ns_value = st.number_input("ns의 고정값을 입력해주세요.", value=5, min_value=1)
+            ns_value = st.number_input("ns의 고정값을 입력해주세요.", value=5, min_value=0)
         else:    
             ns = st.slider(
                 "ns의 범위입니다.",

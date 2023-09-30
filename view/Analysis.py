@@ -48,9 +48,10 @@ def Analysis_page():
         st.write(f"x 좌표: {x_coordinates}")
 
         st.markdown("##### H 실험값")
-
-        is_user_input = st.checkbox("실험값 직접 입력하기")
-
+        if measurement != "직접 입력하기":
+            is_user_input = st.checkbox("실험값 직접 입력하기")
+        else: is_user_input = st.checkbox("실험값 직접 입력하기", value=True)
+    
         if is_user_input:
             # 사용자로부터 숫자 입력 받기
             user_input = st.text_input("H 실험값을 입력하세요 (쉼표 혹은 띄어쓰기로 구분):", placeholder="ex. 1, 2, 3 or 1 2 3")
@@ -74,13 +75,11 @@ def Analysis_page():
         else: 
             st.markdown("##### 최소자승법(LSM)으로 직선 구하기")
 
-
             slope, intercept = get_line_with_lsm(x_coordinates, measurement_results)
             line_values = np.array(slope*x_coordinates + intercept)
             st.write(f"최소 자승법으로 구한 직선 방정식: y = {slope:.2f}x + {intercept:.2f}")
 
             mse = calculate_mse(line_values, measurement_results)
-            # st.write(f"mse: {mse}")
             fig1 = plot_st(measurement_results, line_values,
                 x=x_coordinates, title=f"Measurement Data[{measurement}] vs Approximate Line",
                 description=f"mse: {mse:.4f}\n Approximate Line: y = {slope:.2f}x + {intercept:.2f}\n ") 
@@ -92,7 +91,6 @@ def Analysis_page():
             buffer.seek(0)
 
             st.download_button(label='Download Graph', data=buffer, file_name=f'{measurement}.png',mime='image/png')
-
 
     with col2:
         st.markdown("### 모델 vs 실험값")
