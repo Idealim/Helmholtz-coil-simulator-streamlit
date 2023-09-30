@@ -81,14 +81,14 @@ def Analysis_page():
 
             mse = calculate_mse(line_values, measurement_results)
             # st.write(f"mse: {mse}")
-            fig = plot_st(measurement_results, line_values,
+            fig1 = plot_st(measurement_results, line_values,
                 x=x_coordinates, title=f"Measurement Data[{measurement}] vs Approximate Line",
                 description=f"mse: {mse:.4f}\n Approximate Line: y = {slope:.2f}x + {intercept:.2f}\n ") 
             
-            st.pyplot(fig)
+            st.pyplot(fig1)
 
             buffer = io.BytesIO()
-            fig.savefig(buffer, format="png", bbox_inches="tight")
+            fig1.savefig(buffer, format="png", bbox_inches="tight")
             buffer.seek(0)
 
             st.download_button(label='Download Graph', data=buffer, file_name=f'{measurement}.png',mime='image/png')
@@ -150,9 +150,12 @@ def Analysis_page():
             mse = calculate_mse(model_results[x_coordinates], measurement_results)
     
             st.markdown("###### 모델, 실험값 비교")
-            fig = st.pyplot(plot_st(measurement_results, model_results , x1= x_coordinates, step=step, title=f"Model[{measurement_params_key}] vs Measurement Data[{measurement}]", description=f"mse: {mse:.4f}"))
-
-
+            fig2 = plot_st(measurement_results, model_results , x1= x_coordinates, step=step, title=f"Model[{measurement_params_key}] vs Measurement Data[{measurement}]", description=f"mse: {mse:.4f}")
+            st.pyplot(fig2)
+            buffer = io.BytesIO()
+            fig2.savefig(buffer, format="png", bbox_inches="tight")
+            buffer.seek(0)
+            st.download_button(label='Download Graph', data=buffer, file_name=f'{measurement_params_key}.png',mime='image/png')
 
 
 
