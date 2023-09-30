@@ -124,65 +124,6 @@ def Analysis_page():
             min_value=0.025, 
             max_value=20.
         )
-
-        # if st.session_state.best_params is not None:
-        #     st.markdown("##### 첫번째 코일의 반지름(r1)")
-        #     r1 = st.number_input("r1의 고정값을 입력해주세요. 단위:[cm]", key="r1_value", value=float(st.session_state.best_params['r1']), min_value=0.01)
-        #     st.markdown("##### 두번째 코일의 반지름(r2)")
-        #     r2 = st.number_input("r2의 고정값을 입력해주세요. 단위:[cm]", key="r2_value", value=float(st.session_state.best_params['r2']), min_value=0.01)
-        #     st.markdown("##### 두 코일 사이의 거리(d)")
-        #     d = st.number_input("d의 고정값을 입력해주세요. 단위:[cm]", key="d_value", value=float(st.session_state.best_params['d']), min_value=0.01)
-        #     st.markdown("##### 첫번째 코일의 x축 방향으로 감은 횟수(mf)")
-        #     mf = st.number_input("mf의 고정값을 입력해주세요.", key="mf_value", value=int(st.session_state.best_params['mf']), min_value=1)
-        #     st.markdown("##### 찻번째 코일의 y축 방향으로 감은 횟수(nf)")
-        #     nf = st.number_input("nf의 고정값을 입력해주세요.", key="nf_value", value=int(st.session_state.best_params['nf']), min_value=1)
-        #     st.markdown("##### 첫번째 코일 마지막 층의 x축 방향으로 감은 개수(alpha1)")
-        #     alpha1 = st.number_input("첫번째 코일 마지막 층의 x축 방향으로 감은 개수를 입력해주세요.", key="alpha1_value", value=0, min_value=0, max_value=mf-1)
-        #     st.markdown("##### 두번째 코일의 x축 방향으로 감은 횟수(ms)")
-        #     ms = st.number_input("ms의 고정값을 입력해주세요.", key="ms_value", value=int(st.session_state.best_params['ms']), min_value=1)
-        #     st.markdown("##### 두번째 코일 마지막 층의 x축 방향으로 감은 개수(alpha2)")
-        #     alpha2 = st.number_input("두번째 코일 마지막 층의 x축 방향으로 감은 개수를 입력해주세요.",key="alpha2_value", value=0, min_value=0, max_value=ms-1)    
-        #     st.markdown("##### 두번째 코일의 y축 방향으로 감은 횟수(ns)")
-        #     ns = st.number_input("ns의 고정값을 입력해주세요.", key="ns_value", value=int(st.session_state.best_params['ns']), min_value=1)
-        #     st.markdown("##### Wire Radius(R)")
-        #     R = st.number_input("초기값은 0.025cm입니다. (0.001 단위는 반올림으로 표시됩니다.)  단위: [cm]", key="R_value",value=st.session_state.best_params['R'],min_value=0.005, max_value=1.,step=0.005)
-            
-        #     st.markdown("##### Step size")    
-        #     step = st.number_input(
-        #         "첫 번째 코일에서 두 번째 코일로 이동하는 길이입니다. 값이 작을수록 데이터가 많아집니다. 단위: [cm]", key="step_value",
-        #         value=st.session_state.best_params['step'],
-        #         min_value=0.025, 
-        #         max_value=20.
-        #     )
-        # else:
-        #     st.markdown("##### 첫번째 코일의 반지름(r1)")
-        #     r1 = st.number_input("첫번째 코일의 반지름(r1)을 입력해주세요. 단위:[cm]", key="r1_value", value=5.0, min_value=0.01)
-        #     st.markdown("##### 두번째 코일의 반지름(r2)")
-        #     r2 = st.number_input("두번째 코일의 반지름(r2)을 입력해주세요. 단위:[cm]", key="r2_value", value=5.0, min_value=0.01)
-        #     st.markdown("##### 두 코일 사이의 거리(d)")
-        #     d = st.number_input("두 코일 사이의 거리(d)을 입력해주세요. 단위:[cm]", key="d_value", value=5.6, min_value=0.01)
-        #     st.markdown("##### 첫번째 코일의 x축 방향으로 감은 개수(mf)")
-        #     mf = st.number_input("첫번째 코일의 x축 방향으로 감은 개수 입력해주세요.", key="mf_value", value=19, min_value=1)
-        #     st.markdown("##### 첫번째 코일 마지막 층의 x축 방향으로 감은 개수(alpha1)")
-        #     alpha1 = st.number_input("첫번째 코일 마지막 층의 x축 방향으로 감은 개수를 입력해주세요.", key="alpha1_value", value=0, min_value=0, max_value=mf-1)
-        #     st.markdown("##### 첫번째 코일의 y축 방향으로 감은 개수(nf)")
-        #     nf = st.number_input("첫번째 코일의 y축 방향으로 감은 개수 입력해주세요.", key="nf_value", value=11, min_value=1)
-        #     st.markdown("##### 두번째 코일의 x축 방향으로 감은 개수(ms)")
-        #     ms = st.number_input("두번째 코일의 x축 방향으로 감은 개수를 입력해주세요.", key="ms_value", value=9, min_value=1)
-        #     st.markdown("##### 두번째 코일 마지막 층의 x축 방향으로 감은 개수(alpha2)")
-        #     alpha2 = st.number_input("두번째 코일 마지막 층의 x축 방향으로 감은 개수를 입력해주세요.", key="alpha2_value", value=0, min_value=0, max_value=ms-1)
-        #     st.markdown("##### 두번째 코일의 y축 방향으로 감은 개수(ns)")
-        #     ns = st.number_input("ns의 고정값을 입력해주세요.", key="ns_value", value=3, min_value=1)
-        #     st.markdown("##### Wire Radius(R)")
-        #     R = st.number_input("초기값은 0.025cm입니다. (주의)0.001 단위는 반올림으로 표시됩니다. 단위: [cm]", key="R_value",value=0.025,min_value=0.005, max_value=1.,step=0.005)
-            
-        #     st.markdown("##### Step size")    
-        #     step = st.number_input(
-        #         "첫 번째 코일에서 두 번째 코일로 이동하는 길이입니다. 값이 작을수록 데이터가 많아집니다. 단위: [cm]", key="step_value",
-        #         value=0.1,
-        #         min_value=0.025, 
-        #         max_value=20.
-        #     )
             
         target_value1 = st.number_input(
             "첫 번째 코일의 목표 H값 입니다. 단위:[Oe]",
