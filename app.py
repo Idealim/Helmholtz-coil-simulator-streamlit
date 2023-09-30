@@ -4,8 +4,8 @@ from view import Optimizer_page, Analysis_page
 
 
 if 'best_params' not in st.session_state:
-    # For Folder picker button
     st.session_state.best_params = None
+
 
 st.set_page_config(layout="wide")
 # st.header('Helmholtz Coil Simulator', divider='gray')

@@ -13,10 +13,10 @@ def helmholtz_coil(r1, r2, d, mf, nf, ms, ns, R, step, target_value1, target_val
     Args:
         r (float): 물체 반지름 [단위 : cm]
         d (float): 물체 사이 거리 [단위 : cm]
-        mf, nf (int): 첫 번째 코일의 x축, y축 방향으로 감은 개수 [단위 : cm]
-        ms, ns (int): 두 번째 코일의 x축, y축 방향으로 감은 개수 [단위 : cm]
-        R (float): Wire의 반지름
-        step (float): x축 방향으로 이동 거리
+        mf, nf (int): 첫 번째 코일의 x축, y축 방향으로 감은 개수 
+        ms, ns (int): 두 번째 코일의 x축, y축 방향으로 감은 개수
+        R (float): Wire의 반지름 [단위 : cm]
+        step (float): x축 방향으로 이동 거리 [단위 : cm]
         target_value1 (float): 첫 번째 코일의 목표 H 값 [단위: Oe]
         target_value2 (float): 두 번째 코일의 목표 H 값  [단위: Oe]
     Returns:
@@ -161,7 +161,7 @@ if __name__ == "__main__":
         d=6,  
         mf=12, nf=13, 
         ms=6, ns=4, 
-        step= 0.1, R=0.04,
+        step= 0.1, R=0.02,
         target_value1=25, target_value2=10)
     print(predicted_values, actual_values)
     print(calculate_mse(predicted_values, actual_values))
