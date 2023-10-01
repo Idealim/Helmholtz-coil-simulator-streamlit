@@ -22,7 +22,8 @@ with st.sidebar:
                            icons=['house', 'sliders2', 'graph-up'], menu_icon="magnet-fill"
                            )
 if selected == "About":
-    st.markdown("#### 설명 추가 예정입니다. 사이드바 버튼을 이용해주세요.")
+    st.latex(r'''H=\frac{I}{2}[\sum\limits_{n_2=0}^{nf-1}\sum\limits_{n_1=0}^{mf-1}(\frac {(r_1+R+n_1D)^2}{[(x+R+n_1D)^2+(r_1+R+n_2D)^2]^{3/2}})+ \sum\limits_{n_2=0}^{ns-1}\sum\limits_{n_1=0}^{ms-1}(\frac {(r_2+R+n_1D)^2}{[(d-x+R+n_1D)^2+(r_2+R+n_2D)^2]^{3/2}})]''')
+    st.latex(r'''H=\frac{I}{2}[\sum\limits_{n_2=0}^{nf-2}\sum\limits_{n_1=0}^{mf-1}(\frac {(r_1+R+n_1D)^2}{[(x+R+n_1D)^2+(r_1+R+n_2D)^2]^{3/2}})+ \sum\limits_{n_1=0}^{\alpha_1-1}\frac {(r_1+R+n_1D)^2}{[(x+R+n_1D)^2+[r_1+R+(nf-1)D]^2]^{3/2}}+ \sum\limits_{n_2=0}^{ns-2}\sum\limits_{n_1=0}^{ms-1}(\frac {(r_2+R+n_1D)^2}{[(d-x+R+n_1D)^2+(r_2+R+n_2D)^2]^{3/2}})+ \sum\limits_{n_1=0}^{\alpha_2-1}\frac {(r_1+R+n_1D)^2}{[(x+R+n_1D)^2+[r_1+R+(ns-1)D]^2]^{3/2}}]''')
 elif selected == "Optimizer":
     Optimizer_page()
 elif selected == "Data Analysis":

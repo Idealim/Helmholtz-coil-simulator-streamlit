@@ -89,7 +89,7 @@ def optimize(params):
     print(best_params)
     predicted_values, actual_values = helmholtz_coil(**best_params)
     
-    fig = plot_st(predicted_values, actual_values, step=params['step'], title=best_params)
+    fig = plot_st(predicted_values, actual_values, step=params['step'], title="Model vs Target Value", description=f"{best_params}\nbest_loss={best_loss:.3f}")
     
     return best_params, best_loss, fig, predicted_values
 

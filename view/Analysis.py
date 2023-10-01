@@ -75,7 +75,7 @@ def Analysis_page():
             mse = calculate_mse(line_values, measurement_results)
             fig1 = plot_st(measurement_results, line_values,
                 x=x_coordinates, title=f"Measurement Data[{measurement}] vs Approximate Line",
-                description=f"mse: {mse:.4f}\n Approximate Line: y = {slope:.2f}x + {intercept:.2f}\n ") 
+                description=f"mse: {mse:.3f}\n Approximate Line: y = {slope:.2f}x + {intercept:.2f}\n ") 
             
             st.pyplot(fig1)
 
@@ -141,9 +141,8 @@ def Analysis_page():
             mse = calculate_mse(model_results[x_coordinates], measurement_results)
     
             st.markdown("###### 모델, 실험값 비교")
-            fig2 = plot_st(measurement_results, model_results , x1= x_coordinates, step=step, title=f"Model[{measurement_params_key}] vs Measurement Data[{measurement}]", description=f"mse: {mse:.4f}")
+            fig2 = plot_st(measurement_results, model_results , x1= x_coordinates, step=step, title=f"Model[{measurement_params_key}] vs Measurement Data[{measurement}]", description=f"mse: {mse:.3f}")
             st.pyplot(fig2)
-            st.write(f"{model_results[x_coordinates]}")
             buffer = io.BytesIO()
             fig2.savefig(buffer, format="png", bbox_inches="tight")
             buffer.seek(0)

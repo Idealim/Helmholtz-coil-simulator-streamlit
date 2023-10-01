@@ -1,5 +1,6 @@
 import streamlit as st
 from model.Calculator import optimize
+import io
 
 def Optimizer_page():
 
@@ -179,11 +180,15 @@ def Optimizer_page():
                 best_params, best_loss, fig, predicted_value = optimize(params)
                 status.update(label="최적화 완료!", state="complete", expanded=False)
             st.markdown("##### 시각화")
-            fig = st.pyplot(fig)
-            st.markdown('##### 예측값')
-            st.write(predicted_value)
+            st.pyplot(fig)
+            buffer = io.BytesIO()
+            fig.savefig(buffer, format="png", bbox_inches="tight")
+            buffer.seek(0)
+            st.download_button(label='Download Graph', data=buffer, file_name=f'{best_params}.png',mime='image/png')
+            st.markdown('##### 모델의 예측값')
+            st.write(f"{predicted_value}")
             st.markdown("##### 최적의 하이퍼 파라미터값")
-            st.write(best_params)
+            st.write(f"{best_params}")
             st.markdown("##### 최적의 손실값")
             st.write(best_loss)
             st.session_state.best_params = best_params
