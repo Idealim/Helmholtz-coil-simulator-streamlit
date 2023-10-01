@@ -49,12 +49,12 @@ def plot_st(predicted_values, target_values, x=None, x1=None, x2=None, step=None
                 x2 = np.delete(x2, -1)
 
 
-    if num_of_data1 < 15: 
+    if num_of_data1 < 20: 
         ax.scatter(x1, predicted_values, label='predicted_value', marker='x', color='red')
     else:
         ax.plot(x1, predicted_values, label='predicted_value', marker='o', linestyle='-', color='blue')
     
-    if num_of_data2 < 15:
+    if num_of_data2 < 20:
         ax.plot(x2, target_values, label='predicted_value', linestyle='-', color='black')
     else:  
         ax.plot(x2, target_values, label='target_value', marker='', color='black')

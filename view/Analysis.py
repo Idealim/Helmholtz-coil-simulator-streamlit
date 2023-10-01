@@ -16,21 +16,14 @@ def Analysis_page():
     with col1:
         st.markdown("#### 실험값 입력")
         measurement = st.selectbox('실험 Case 를 선택해주세요.',
-                                ('직접 입력하기','208/22 try1','208/27 try1','208/27 try2','208/27 mean','208/32 try1','208/32 try2','208/32 mean','218/27 try1','218/27 try2','218/27 mean','198/27 try1','198/27 try2','198/27 mean'))
+                                ('직접 입력하기','228 try1','228 try2','228 mean', '208/22 try1','208/27 try1','208/27 try2','208/27 mean','208/32 try1','208/32 try2','208/32 mean','218/27 try1','218/27 try2','218/27 mean','198/27 try1','198/27 try2','198/27 mean'))
 
         if measurement == "직접 입력하기":
             params = measurement_params['default']
             measurement_results = []
             st.write("실험값을 직접 입력해주세요.")
-        elif st.session_state.best_params is not None:
-            st.info("자동으로 Optimizer에서 찾은 최적의 하이퍼파라미터로 업데이트 되었습니다.")
-            params = st.session_state.best_params
-            params['alpha1'] = 0
-            params['alpha2'] = 0
-            measurement_results = []
-            st.write("실험값을 직접 입력해주세요.")
         else:    
-            measurement_params_key = measurement[0:6] # ex. '208/27'
+            measurement_params_key = measurement.split(' ')[0] # ex. '208/27'
             params = measurement_params[measurement_params_key]
             measurement_results = measurement_datas[measurement]
             st.write(f"실험값: {measurement_results}")
@@ -101,17 +94,17 @@ def Analysis_page():
         st.markdown("##### 두 코일 사이의 거리(d)")
         d = st.number_input("d의 고정값을 입력해주세요. 단위:[cm]", key="d_value", value=float(params['d']), min_value=0.01)
         st.markdown("##### 첫번째 코일의 x축 방향으로 감은 횟수(mf)")
-        mf = st.number_input("mf의 고정값을 입력해주세요.", key="mf_value", value=int(params['mf']), min_value=1)
+        mf = st.number_input("mf의 고정값을 입력해주세요.", key="mf_value", value=int(params['mf']), min_value=0)
         st.markdown("##### 찻번째 코일의 y축 방향으로 감은 횟수(nf)")
-        nf = st.number_input("nf의 고정값을 입력해주세요.", key="nf_value", value=int(params['nf']), min_value=1)
+        nf = st.number_input("nf의 고정값을 입력해주세요.", key="nf_value", value=int(params['nf']), min_value=0)
         st.markdown("##### 첫번째 코일 마지막 층의 x축 방향으로 감은 개수(alpha1)")
-        alpha1 = st.number_input("첫번째 코일 마지막 층의 x축 방향으로 감은 개수를 입력해주세요.", key="alpha1_value", value=params['alpha1'], min_value=0, max_value=mf-1)
+        alpha1 = st.number_input("첫번째 코일 마지막 층의 x축 방향으로 감은 개수를 입력해주세요.", key="alpha1_value", value=params['alpha1'], min_value=0, max_value=0 if mf-1<0 else mf-1)
         st.markdown("##### 두번째 코일의 x축 방향으로 감은 횟수(ms)")
-        ms = st.number_input("ms의 고정값을 입력해주세요.", key="ms_value", value=int(params['ms']), min_value=1)
+        ms = st.number_input("ms의 고정값을 입력해주세요.", key="ms_value", value=int(params['ms']), min_value=0)
         st.markdown("##### 두번째 코일의 y축 방향으로 감은 횟수(ns)")
-        ns = st.number_input("ns의 고정값을 입력해주세요.", key="ns_value", value=int(params['ns']), min_value=1)
+        ns = st.number_input("ns의 고정값을 입력해주세요.", key="ns_value", value=int(params['ns']), min_value=0)
         st.markdown("##### 두번째 코일 마지막 층의 x축 방향으로 감은 개수(alpha2)")
-        alpha2 = st.number_input("두번째 코일 마지막 층의 x축 방향으로 감은 개수를 입력해주세요.", key="alpha2_value", value=params['alpha2'], min_value=0, max_value=ms-1) 
+        alpha2 = st.number_input("두번째 코일 마지막 층의 x축 방향으로 감은 개수를 입력해주세요.", key="alpha2_value", value=params['alpha2'], min_value=0, max_value=0 if nf-1<0 else nf-1) 
         st.markdown("##### Wire Radius(R)")
         R = st.number_input("초기값은 0.025cm입니다. (0.001 단위는 반올림으로 표시됩니다.)  단위: [cm]",key="R_value", value=params['R'],min_value=0.005, max_value=1.,step=0.005)
         
@@ -150,6 +143,7 @@ def Analysis_page():
             st.markdown("###### 모델, 실험값 비교")
             fig2 = plot_st(measurement_results, model_results , x1= x_coordinates, step=step, title=f"Model[{measurement_params_key}] vs Measurement Data[{measurement}]", description=f"mse: {mse:.4f}")
             st.pyplot(fig2)
+            st.write(f"{model_results[x_coordinates]}")
             buffer = io.BytesIO()
             fig2.savefig(buffer, format="png", bbox_inches="tight")
             buffer.seek(0)
