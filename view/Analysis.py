@@ -1,7 +1,7 @@
 import streamlit as st
 from model.Calculator import get_line_with_lsm, calculate_mse
 from model.ModifiedHelmholtzCoil import modified_helmholtz_coil
-from utils import plot_st
+from utils import plot_st, plot_error_st
 import re
 import pandas as pd
 import numpy as np
@@ -16,7 +16,7 @@ def Analysis_page():
     with col1:
         st.markdown("#### 실험값 입력")
         measurement = st.selectbox('실험 Case 를 선택해주세요.',
-                                ('직접 입력하기','228 try1','228 try2','228 mean', '208/22 try1','208/27 try1','208/27 try2','208/27 mean','208/32 try1','208/32 try2','208/32 mean','218/27 try1','218/27 try2','218/27 mean','198/27 try1','198/27 try2','198/27 mean'))
+                                ('직접 입력하기','228 mean', '209/22 mean','209/27 mean','209/32 mean','219/27 mean','199/27 mean'))
 
         if measurement == "직접 입력하기":
             params = measurement_params['default']
@@ -30,11 +30,11 @@ def Analysis_page():
 
 
         st.markdown("##### x 좌표 측정 시작값 입력")
-        x_start = st.number_input("x 좌표 시작값, 단위: [cm]", value=0.7, min_value = 0.)
+        x_start = st.number_input("x 좌표 시작값, 단위: [cm]", value=params['x_start'], min_value = 0.)
         st.markdown("##### x 좌표 측정 종료값 입력")
-        x_end = st.number_input("x 좌표 종료값, 단위: [cm]", value=4.7, min_value = 0.)
+        x_end = st.number_input("x 좌표 종료값, 단위: [cm]", value=params['x_end'], min_value = 0.)
         st.markdown("##### x 좌표 간격 입력")
-        x_step = st.number_input("x 좌표 간격, 단위: [cm]", value=0.5, min_value = 0.)
+        x_step = st.number_input("x 좌표 간격, 단위: [cm]", value=params['x_step'], min_value = 0.)
 
 
         x_coordinates = np.array([x_start + i * x_step for i in range(int((x_end - x_start) / x_step) + 1)])
@@ -79,29 +79,47 @@ def Analysis_page():
             
             st.pyplot(fig1)
 
+            approximation_data = pd.DataFrame({
+                'x': x_coordinates,
+                'meaurement': measurement_results,
+                'approximate_value': line_values,
+                'error': abs(measurement_results - line_values),
+                'error_percentage': abs((measurement_results - line_values) / line_values) * 100,
+            })
+            approximation_data.set_index('x', inplace=True)
+            
+            st.write(approximation_data)
+
             buffer = io.BytesIO()
             fig1.savefig(buffer, format="png", bbox_inches="tight")
             buffer.seek(0)
-
             st.download_button(label='Download Graph', data=buffer, file_name=f'{measurement}.png',mime='image/png')
+            st.download_button(label='Download Table', data=approximation_data.to_csv().encode('utf-8'), file_name=f'{measurement_params_key}_approximation.csv',mime='text/csv')
+
+            st.markdown("###### error percentage")
+            line_error_fig = plot_error_st(approximation_data['error_percentage'], x=approximation_data.index, title=f'Error Percetnage of {measurement_params_key}_Approximation', description=f"mean: {np.mean(approximation_data['error_percentage']):.2f}\n std: {np.std(approximation_data['error_percentage']):.2f}")
+            st.pyplot(line_error_fig)
+            line_error_fig.savefig(buffer, format="png", bbox_inches="tight")
+            buffer.seek(0)
+            st.download_button(label='Download Error Graph', data=buffer, file_name=f'Approximation_{measurement_params_key}_error_percentage.png',mime='image/png')
 
     with col2:
         st.markdown("### 모델 vs 실험값")
-        st.markdown("##### 첫번째 코일의 반지름(r1)")
-        r1 = st.number_input("r1의 고정값을 입력해주세요. 단위:[cm]", key="r1_value", value=float(params['r1']), min_value=0.01)
-        st.markdown("##### 두번째 코일의 반지름(r2)")
-        r2 = st.number_input("r2의 고정값을 입력해주세요. 단위:[cm]", key="r2_value", value=float(params['r2']), min_value=0.01)
+        st.markdown("##### 첫번째 코일의 반지름(a1)")
+        r1 = st.number_input("a1의 고정값을 입력해주세요. 단위:[cm]", key="r1_value", value=float(params['r1']), min_value=0.01)
+        st.markdown("##### 두번째 코일의 반지름(a2)")
+        r2 = st.number_input("a2의 고정값을 입력해주세요. 단위:[cm]", key="r2_value", value=float(params['r2']), min_value=0.01)
         st.markdown("##### 두 코일 사이의 거리(d)")
         d = st.number_input("d의 고정값을 입력해주세요. 단위:[cm]", key="d_value", value=float(params['d']), min_value=0.01)
-        st.markdown("##### 첫번째 코일의 x축 방향으로 감은 횟수(mf)")
-        mf = st.number_input("mf의 고정값을 입력해주세요.", key="mf_value", value=int(params['mf']), min_value=0)
-        st.markdown("##### 찻번째 코일의 y축 방향으로 감은 횟수(nf)")
-        nf = st.number_input("nf의 고정값을 입력해주세요.", key="nf_value", value=int(params['nf']), min_value=0)
+        st.markdown("##### 첫번째 코일의 x축 방향으로 감은 횟수(n_x1)")
+        mf = st.number_input("n_x1의 고정값을 입력해주세요.", key="mf_value", value=int(params['mf']), min_value=0)
+        st.markdown("##### 찻번째 코일의 y축 방향으로 감은 횟수(n_y1)")
+        nf = st.number_input("n_y1의 고정값을 입력해주세요.", key="nf_value", value=int(params['nf']), min_value=0)
         st.markdown("##### 첫번째 코일 마지막 층의 x축 방향으로 감은 개수(alpha1)")
         alpha1 = st.number_input("첫번째 코일 마지막 층의 x축 방향으로 감은 개수를 입력해주세요.", key="alpha1_value", value=params['alpha1'], min_value=0, max_value=0 if mf-1<0 else mf-1)
-        st.markdown("##### 두번째 코일의 x축 방향으로 감은 횟수(ms)")
-        ms = st.number_input("ms의 고정값을 입력해주세요.", key="ms_value", value=int(params['ms']), min_value=0)
-        st.markdown("##### 두번째 코일의 y축 방향으로 감은 횟수(ns)")
+        st.markdown("##### 두번째 코일의 x축 방향으로 감은 횟수(n_x2)")
+        ms = st.number_input("n_x2의 고정값을 입력해주세요.", key="ms_value", value=int(params['ms']), min_value=0)
+        st.markdown("##### 두번째 코일의 y축 방향으로 감은 횟수(n_y2)")
         ns = st.number_input("ns의 고정값을 입력해주세요.", key="ns_value", value=int(params['ns']), min_value=0)
         st.markdown("##### 두번째 코일 마지막 층의 x축 방향으로 감은 개수(alpha2)")
         alpha2 = st.number_input("두번째 코일 마지막 층의 x축 방향으로 감은 개수를 입력해주세요.", key="alpha2_value", value=params['alpha2'], min_value=0, max_value=0 if nf-1<0 else nf-1) 
@@ -127,7 +145,7 @@ def Analysis_page():
             value=10.,
             min_value = 0.01
         ) 
-
+        is_plotting_error_percentage = st.toggle("퍼센트 오차 그리기", value=True)
         btn_run = st.button("모델, 실험값 비교 실행")
         if btn_run:
             model_results, _ = modified_helmholtz_coil(r1, r2, d, mf, nf, ms, ns, alpha1, alpha2, R, step, target_value1, target_value2)
@@ -143,11 +161,31 @@ def Analysis_page():
             st.markdown("###### 모델, 실험값 비교")
             fig2 = plot_st(measurement_results, model_results , x1= x_coordinates, step=step, title=f"Model[{measurement_params_key}] vs Measurement Data[{measurement}]", description=f"mse: {mse:.3f}")
             st.pyplot(fig2)
+
+            analysis_data = pd.DataFrame({
+                'x': x_coordinates,
+                'model': model_results[x_coordinates],
+                'meaurement': measurement_results,
+                'error': abs(measurement_results - model_results[x_coordinates]),
+                'error_percentage': abs(measurement_results - model_results[x_coordinates]) / model_results[x_coordinates] * 100,
+            })
+            analysis_data.set_index('x', inplace=True)
+            
+            st.write(analysis_data)
             buffer = io.BytesIO()
             fig2.savefig(buffer, format="png", bbox_inches="tight")
             buffer.seek(0)
             st.download_button(label='Download Graph', data=buffer, file_name=f'{measurement_params_key}.png',mime='image/png')
+            st.download_button(label='Download Table', data=analysis_data.to_csv().encode('utf-8'), file_name=f'{measurement_params_key}.csv',mime='text/csv')
+            if is_plotting_error_percentage:
+                st.markdown("###### error percentage")
+                error_fig = plot_error_st(analysis_data['error_percentage'], x=analysis_data.index, title=f'Error Percetnage of {measurement_params_key}', description=f"mean: {np.mean(analysis_data['error_percentage']):.2f}\n std: {np.std(analysis_data['error_percentage']):.2f}")
+                st.pyplot(error_fig)
+                error_fig.savefig(buffer, format="png", bbox_inches="tight")
+                buffer.seek(0)
+                st.download_button(label='Download Error Graph', data=buffer, file_name=f'{measurement_params_key}_error_percentage.png',mime='image/png')
 
+                
 
 
 

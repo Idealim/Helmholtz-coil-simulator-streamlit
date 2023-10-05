@@ -18,7 +18,7 @@ def plot(predicted_values, actual_values, step, best_params=None):
         plt.title(f'Predicted_value vs Target_value', fontsize=16, fontweight='bold')
     plt.xlabel('x [cm]')
     plt.xticks(np.arange(0, step * num_of_data, 0.5))
-    plt.ylabel('y [Oe]')
+    plt.ylabel('H [Oe]')
     plt.legend()
     plt.show()
     
@@ -65,7 +65,7 @@ def plot_st(predicted_values, target_values, x=None, x1=None, x2=None, step=None
         ax.set_title(f'Predicted_value vs Target_value', fontsize=16, fontweight='bold')
    
     ax.set_xlabel('x [cm]')
-    ax.set_ylabel('y [Oe]')
+    ax.set_ylabel('H [Oe]')
     
     # x축 눈금 그리기
     if step is not None: 
@@ -101,3 +101,41 @@ def plot_error(predicted_values, actual_values, step):
     plt.show()
 
 
+def plot_error_st(values, x=None, step=None, title=None, description=None):
+    """
+    plot on streamlit app
+    """
+    fig, ax = plt.subplots(figsize=(10,5))  # Figure와 Axes 객체 생성
+
+    # x축 값 생성
+    num_of_data = len(values)
+
+    # x축 data 생성
+    if x is None:
+        x = np.arange(0, step * num_of_data, step)
+        if len(x1) > num_of_data:
+            x1 = np.delete(x1, -1)
+
+
+    ax.plot(x, values, marker='o', linestyle='-', color='blue')
+    
+    
+    if title is not None:
+        ax.set_title(f'{title}', fontsize=12, fontweight='bold')
+    else:
+        ax.set_title(f' ', fontsize=16, fontweight='bold')
+   
+    ax.set_xlabel('x [cm]')
+    ax.set_ylabel('Error Percentage [%]')
+    
+    # x축 눈금 그리기
+    if step is not None: 
+        ax.set_xticks(np.arange(0, step * num_of_data, 0.5)) # x축 눈금 단위 0.5
+
+    if description is not None:
+        ax.annotate(f"{description}", (0, 0), xycoords="axes fraction",
+            xytext=(0.5, -0.3), textcoords="axes fraction",
+            fontsize=11, color="black", horizontalalignment="center")
+    
+
+    return fig  # Matplotlib Figure 객체 반환
