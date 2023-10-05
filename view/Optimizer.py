@@ -8,37 +8,37 @@ def Optimizer_page():
 
     with col1:
         st.subheader("하이퍼 파리미터 설정")
-        st.markdown("##### 첫번째 코일의 반지름(r1)")
-        r1_fixed = st.checkbox("r1 고정값")
+        st.markdown("##### 첫번째 코일의 반지름(a1)")
+        r1_fixed = st.checkbox("a1 고정하기")
 
         if r1_fixed:
-            r1_value = st.number_input("r1의 고정값을 입력해주세요. 단위:[cm]", value=5.0, min_value=0.01)
+            r1_value = st.number_input("a1의 고정값을 입력해주세요. 단위:[cm]", value=5.0, min_value=0.01)
         else:
             r1_step = st.number_input(
-                "r1의 단위 입니다. 최적의 r1 단위의 배수 값을 찾습니다. "
-                "ex. 0.5인 경우 r1 = 5 or 5.5 or 6 ... 단위:[cm]",
+                "a1의 단위 입니다. 최적의 a1 단위의 배수 값을 찾습니다. "
+                "ex. 0.5인 경우 a1 = 5 or 5.5 or 6 ... 단위:[cm]",
                 value=0.5, min_value=0.01)
             r1_range = st.slider(
-                "첫번째 코일의 반지름 범위입니다. 해당 범위 안에서 최적의 r1 값을 찾습니다. 단위: [cm]",
+                "첫번째 코일의 반지름 범위입니다. 해당 범위 안에서 최적의 a1 값을 찾습니다. 단위: [cm]",
                 min_value=0.,
                 max_value=30.,
                 value=(5., 10.),
                 step=float(r1_step)
             )
         
-        st.markdown("##### 두번째 코일의 반지름(r2)")
+        st.markdown("##### 두번째 코일의 반지름(a2)")
         
-        r2_fixed = st.checkbox("r2 고정값")
+        r2_fixed = st.checkbox("a2 고정하기")
         if r2_fixed:
-            r2_value = st.number_input("r2의 고정값을 입력해주세요. 단위:[cm]", value=5.0, min_value=0.01)
+            r2_value = st.number_input("a2의 고정값을 입력해주세요. 단위:[cm]", value=5.0, min_value=0.01)
         else:
             r2_step = st.number_input(
-                "r2의 단위 입니다. 최적의 r2 단위의 배수 값을 찾습니다. "
-                "ex. 0.5인 경우 r2 = 5 or 5.5 or 6 ... 단위:[cm]",
+                "a2의 단위 입니다. 최적의 a2 단위의 배수 값을 찾습니다. "
+                "ex. 0.5인 경우 a2 = 5 or 5.5 or 6 ... 단위:[cm]",
                 value=0.5, min_value=0.01
             )
             r2_range = st.slider(
-                "두번째 코일의 반지름 범위입니다. 해당 범위 안에서 최적의 r2 값을 찾습니다. 단위: [cm]",
+                "두번째 코일의 반지름 범위입니다. 해당 범위 안에서 최적의 a2 값을 찾습니다. 단위: [cm]",
                 min_value=0.,
                 max_value=30.,
                 value=(5., 10.),
@@ -46,7 +46,7 @@ def Optimizer_page():
             )
         
         st.markdown("##### 두 코일 사이의 거리(d)")
-        d_fixed = st.checkbox("d 고정값")
+        d_fixed = st.checkbox("d값 고정하기")
         if d_fixed:
             d_value = st.number_input("d의 고정값을 입력해주세요. 단위:[cm]", value=5.0, min_value=0.01)
         else:
@@ -59,54 +59,54 @@ def Optimizer_page():
                 step=float(d_step)
             )
 
-        st.markdown("##### 첫번째 코일의 x축 방향으로 감은 횟수(mf)")
+        st.markdown("##### 첫번째 코일의 x축 방향으로 감은 횟수(n_x1)")
 
-        mf_fixed = st.checkbox("mf 고정값")
+        mf_fixed = st.checkbox("n_x1 고정하기")
         if mf_fixed:
-            mf_value = st.number_input("mf의 고정값을 입력해주세요.", value=5, min_value=0)
+            mf_value = st.number_input("n_x1의 고정값을 입력해주세요.", value=5, min_value=0)
         else:
             mf = st.slider(
-                "mf의 범위입니다.",
+                "n_x1의 범위입니다.",
                 value=(5,20),
                 min_value=1,
                 max_value=100,
                 step=1
             ) 
         
-        st.markdown("##### 찻번째 코일의 y축 방향으로 감은 횟수(nf)")
+        st.markdown("##### 찻번째 코일의 y축 방향으로 감은 횟수(n_y1)")
         
-        nf_fixed = st.checkbox("nf 고정값")
+        nf_fixed = st.checkbox("n_y1 고정하기")
         if nf_fixed:
-            nf_value = st.number_input("nf의 고정값을 입력해주세요.", value=5, min_value=0)
+            nf_value = st.number_input("n_y1의 고정값을 입력해주세요.", value=5, min_value=0)
         else:
             nf = st.slider(
-                "nf의 범위입니다.",
+                "n_y1의 범위입니다.",
                 value=(5,20),
                 min_value=1,
                 max_value=100,
                 step=1
             ) 
 
-        st.markdown("##### 두번째 코일의 x축 방향으로 감은 횟수(ms)")
-        ms_fixed = st.checkbox("ms 고정값")
+        st.markdown("##### 두번째 코일의 x축 방향으로 감은 횟수(n_x2)")
+        ms_fixed = st.checkbox("n_x2 고정하기")
         if ms_fixed:
-            ms_value = st.number_input("ms의 고정값을 입력해주세요.", value=5, min_value=0)
+            ms_value = st.number_input("n_x2의 고정값을 입력해주세요.", value=5, min_value=0)
         else:
             ms = st.slider(
-                "ms의 범위입니다.",
+                "n_x2의 범위입니다.",
                 value=(1,20),
                 min_value=1,
                 max_value=100,
                 step=1
             ) 
             
-        st.markdown("##### 두번째 코일의 y축 방향으로 감은 횟수(ns)")
-        ns_fixed = st.checkbox("ns 고정값")
+        st.markdown("##### 두번째 코일의 y축 방향으로 감은 횟수(n_y2)")
+        ns_fixed = st.checkbox("n_y2 고정하기")
         if ns_fixed:
-            ns_value = st.number_input("ns의 고정값을 입력해주세요.", value=5, min_value=0)
+            ns_value = st.number_input("n_y2의 고정값을 입력해주세요.", value=5, min_value=0)
         else:    
             ns = st.slider(
-                "ns의 범위입니다.",
+                "n_y2의 범위입니다.",
                 value=(1,20),
                 min_value=1,
                 max_value=100,
