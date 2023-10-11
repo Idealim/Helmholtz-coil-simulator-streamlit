@@ -1,7 +1,8 @@
 import streamlit as st
 
 def About_page():
-    
+    st.subheader("Helmholtz Coil Simulator")
+    st.markdown("##### 해당 시뮬레이터는 아래 문제를 해결하기 위해 제작되었습니다.")
     col1, col2 = st.columns(2, gap='large')
     with col1:
         st.markdown('''

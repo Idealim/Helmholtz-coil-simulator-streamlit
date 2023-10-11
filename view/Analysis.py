@@ -96,8 +96,8 @@ def Analysis_page():
             st.download_button(label='Download Graph', data=buffer, file_name=f'{measurement}.png',mime='image/png')
             st.download_button(label='Download Table', data=approximation_data.to_csv().encode('utf-8'), file_name=f'{measurement_params_key}_approximation.csv',mime='text/csv')
 
-            st.markdown("###### error percentage")
-            line_error_fig = plot_error_st(approximation_data['error_percentage'], x=approximation_data.index, title=f'Error Percetnage of {measurement_params_key}_Approximation', description=f"mean: {np.mean(approximation_data['error_percentage']):.2f}\n std: {np.std(approximation_data['error_percentage']):.2f}")
+            st.markdown("###### percentage error")
+            line_error_fig = plot_error_st(approximation_data['error_percentage'], x=approximation_data.index, title=f'Percetnage Error of {measurement_params_key}_Approximation', description=f"mean: {np.mean(approximation_data['error_percentage']):.2f}\n std: {np.std(approximation_data['error_percentage']):.2f}")
             st.pyplot(line_error_fig)
             line_error_fig.savefig(buffer, format="png", bbox_inches="tight")
             buffer.seek(0)
@@ -178,8 +178,8 @@ def Analysis_page():
             st.download_button(label='Download Graph', data=buffer, file_name=f'{measurement_params_key}.png',mime='image/png')
             st.download_button(label='Download Table', data=analysis_data.to_csv().encode('utf-8'), file_name=f'{measurement_params_key}.csv',mime='text/csv')
             if is_plotting_error_percentage:
-                st.markdown("###### error percentage")
-                error_fig = plot_error_st(analysis_data['error_percentage'], x=analysis_data.index, title=f'Error Percetnage of {measurement_params_key}', description=f"mean: {np.mean(analysis_data['error_percentage']):.2f}\n std: {np.std(analysis_data['error_percentage']):.2f}")
+                st.markdown("###### percentage error")
+                error_fig = plot_error_st(analysis_data['error_percentage'], x=analysis_data.index, title=f'Percetnage Error of {measurement_params_key}', description=f"mean: {np.mean(analysis_data['error_percentage']):.2f}\n std: {np.std(analysis_data['error_percentage']):.2f}")
                 st.pyplot(error_fig)
                 error_fig.savefig(buffer, format="png", bbox_inches="tight")
                 buffer.seek(0)

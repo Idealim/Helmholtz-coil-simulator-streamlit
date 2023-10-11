@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
-from view import Optimizer_page, Analysis_page, About_page
+from view import Optimizer_page, Analysis_page, About_page, Calculator_page
 
 
 if 'best_params' not in st.session_state:
@@ -18,11 +18,13 @@ st.markdown(f'''
 ''',unsafe_allow_html=True)
 
 with st.sidebar: 
-    selected = option_menu("Helmholtz Coil Simulator", ["About", "Optimizer", "Data Analysis"],
-                           icons=['house', 'sliders2', 'graph-up'], menu_icon="magnet-fill"
+    selected = option_menu("Helmholtz Coil Simulator", ["About", "Calculator","Optimizer", "Data Analysis"],
+                           icons=['house', 'calculator-fill','sliders2', 'graph-up'], menu_icon="magnet-fill"
                            )
 if selected == "About":
     About_page()
+elif selected == "Calculator":
+    Calculator_page()
 elif selected == "Optimizer":
     Optimizer_page()
 elif selected == "Data Analysis":
